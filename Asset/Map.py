@@ -1,4 +1,4 @@
-import os
+import os,random
 
 def Map_Load(_id):
     Map = ""
@@ -31,18 +31,30 @@ def Map_Print(q,Map_H,Map_W,p):
         print("")
     q[p] = k
 
-def Player_Move(q,Map_H,Map_W,p,d):
+def Player_Move(q,Map_H,Map_W,p,d,t):
+    o = p
     if d == "w":
-        p -= Map_W
-        return p
+        o -= Map_W*t
+        if q[o] == "牆":
+            p = p
+        else:
+            p = o
     elif d == "s":
-        p += Map_W
-        return p
+        o += Map_W*t
+        if q[o] == "牆":
+            p = p
+        else:
+            p = o
     elif d == "d":
-        p += 1
-        return p
+        o += 1*t
+        if q[o] == "牆":
+            p = p
+        else:
+            p = o
     elif d == "a":
-        p -= 1
-        return p
-    else:
-        return p
+        o -= 1*t
+        if q[o] == "牆":
+            p = p
+        else:
+            p = o
+    return (p)

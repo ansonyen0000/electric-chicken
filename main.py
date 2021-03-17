@@ -1,19 +1,24 @@
-from Asset import Save,Money_System,Map,Plot
+from Asset import Save,Map,Plot,Chicken_System
 import threading,os,time,random
 
-
+First_Open = 0
 #-----------------------------Load()
-First_Open = False
+Day = 0
+Time = 0
+
 Player_Place="Home"
-if os.path.exists(os.getcwd()+os.sep+"save.txt") == False:
-    monry = 0
-else:
+if os.path.exists(os.getcwd()+os.sep+"save.txt") == True:
     with open(os.getcwd()+os.sep+"save.txt","rt",encoding="utf-8") as save:
         data = save.readlines()
         for i in data:
-            a = i.rsplit("\n",1)
+            a = i.rsplit("\n")
             a = a[0]
             a = exec(a)
+if First_Open == 0:
+    Day = 0
+    Time = 0
+    Chicken = Chicken_System.Chicken(0,0,0,0,0,0,0,0,0,0,0,0,0)
+    
 #-----------------------------Updata()
 def Updata():
     while(1):
@@ -25,30 +30,22 @@ updata = threading.Thread(target = Updata, name = 'Updata')
 updata.start()
 
 #-----------------------------Save()
-def Save_Date():
-    Save.save("df",100)
+def Save_Date(Chicken,p):
+    Save.save(Chicken,p,p,p,p)
+
+Save_Date(Chicken,1)
 #----------------------------------------------------------Day()
-
-Plot.Main_Plot(0)
-Plot.Main_Plot(1)
-Plot.Main_Plot(2)
-Plot.Main_Plot(3)
-Plot.Main_Plot(4)
-Plot.Main_Plot(5)
-Plot.Main_Plot(6)
-Plot.Main_Plot(7)
-Plot.Main_Plot(8)
-Plot.Main_Plot(9)
-
-qw = 84
-map = Map.Map_Load(0)
-while(1):
-    pp = input(":")
-    qw = Map.Player_Move(map[0],map[1],map[2],qw,pp)
-    Map.Map_Print(map[0],map[1],map[2],qw)
-
+Chicken._EXP(51)
+Chicken._KFC()
+    
 while 1:
 #-----------------------------Plot()
+    if Day == 0:
+        Plot.Main_Plot(0)
+    if Day == 1:
+        Plot.Main_Plot(2)
+    if Day == 2:
+        Plot.Main_Plot(3) 
 #-----------------------------Home()
     while 1:
         ppw = input()
@@ -59,22 +56,19 @@ while 1:
             while 1:
                 op ="po"
      #-----------------------------Bathhouse()
-        elif Player_Place == "Bathhouse":
-            while 1:
+        elif Chicken.Map[0] == "Bathhouse":
+            while Chicken.Map[0] == "Bathhouse":
                 op ="po"
      #-----------------------------Store()
-        elif Player_Place == "Store":
-            while 1:
-                money = Money_System.Buy(money,0)
-                print(money)
-                money = Money_System.Sell(money,0)
-                print(money)
+        elif Chicken.Map[0] == "Store":
+            while Chicken.Map[0] == "Store":
+                op ="po"
     #-----------------------------School()
-        elif Player_Place == "School":
-            while 1:
+        elif Chicken.Map[0] == "School":
+            while Chicken.Map[0] == "School":
                 op ="po"
     #-----------------------------Search()
-        elif Player_Place == "Search":
-            while 1:
+        elif Chicken.Map[0] == "Search":
+            while Chicken.Map[0] == "Search":
                 op ="po"
     print("Loop ok!")
