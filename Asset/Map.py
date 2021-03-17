@@ -1,4 +1,4 @@
-import os,random
+import os,random,math
 
 def Map_Load(_id):
     Map = ""
@@ -51,10 +51,58 @@ def Map_Load(_id):
 def Map_Print(q,Map_H,Map_W,p):
     k = q[p]
     q[p] = "雞"
+    H = int(p/Map_W)+1
+    W = p%Map_W+1
+    ppo = ""
     for i in range(Map_H):
+        ppo = abs(i+1-H)
+        if ppo == 1:
+            s = "一"
+        elif ppo == 2:
+            s = "二"
+        elif ppo == 3:
+            s = "三"
+        elif ppo == 4:
+            s = "四"
+        elif ppo == 5:
+            s = "五"
+        elif ppo == 6:
+            s = "六"
+        elif ppo == 7:
+            s = "七"
+        elif ppo == 8:
+            s = "八"
+        elif ppo == 9:
+            s = "九"
+        else:
+            s = ""
         o = q[i*Map_W:i*Map_W+Map_W]
-        print("".join(o),end="")
+        print("".join(o),s,end="",sep="\u3000")
         print("")
+    print("")
+    for i in range(Map_W):
+        ppo = abs(i+1-W)
+        if ppo == 1:
+            print("一",end = "")
+        elif ppo == 2:
+            print("二",end = "")
+        elif ppo == 3:
+            print("三",end = "")
+        elif ppo == 4:
+            print("四",end = "")
+        elif ppo == 5:
+            print("五",end = "")
+        elif ppo == 6:
+            print("六",end = "")
+        elif ppo == 7:
+            print("七",end = "")
+        elif ppo == 8:
+            print("八",end = "")
+        elif ppo == 9:
+            print("九",end = "")
+        else:
+            print("\u3000",end = "")
+    print("")
     q[p] = k
 def Player_Move(q,Map_H,Map_W,Chicken,d,t):
     o = Chicken.Map[1]
