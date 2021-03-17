@@ -1,1 +1,1 @@
-Chicken = Chicken_System.Chicken(0,0,0,0,0,0,0,0,0,0,0,0,0)
+Chicken = Chicken_System.Chicken(0,0,0,0,0,0,0,0,0,0,0,[0, 55],0)
