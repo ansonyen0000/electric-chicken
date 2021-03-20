@@ -1,8 +1,7 @@
-import os,random,math
+import os,random,math,time
 
 def Map_Load(_id):
     Map = ""
-    print(_id)
     p = []
     q = []
     if _id == 0: #野外
@@ -48,12 +47,17 @@ def Map_Load(_id):
             p += Map[i][j]
     return (p,Map_H,Map_W)
 
-def Map_Print(q,Map_H,Map_W,p):
+def Map_Print(q,Map_H,Map_W,p,Mon=0):
     k = q[p]
     q[p] = "雞"
-    H = int(p/Map_W)+1
+    if Mon != 0:
+        for i in range(len(Mon)):
+            if Mon[i].HP > 0:
+                q[Mon[i].Map[1]] = "怪"
+    H  = int(p/Map_W)+1
     W = p%Map_W+1
     ppo = ""
+    print("")
     for i in range(Map_H):
         ppo = abs(i+1-H)
         if ppo == 1:
@@ -104,7 +108,15 @@ def Map_Print(q,Map_H,Map_W,p):
             print("\u3000",end = "")
     print("")
     q[p] = k
-def Player_Move(q,Map_H,Map_W,Chicken,d,t):
+    
+def Monster_Place(q,Mon):
+    while 1:
+        p = random.randint(0,len(q)-1)
+        if q[p] == "\u3000":
+            Mon.Map = [Mon.Map[0],p]
+            break
+            
+def Player_Move(q,Map_H,Map_W,Chicken,d,t,Mons = 0):
     o = Chicken.Map[1]
     for i in range(t):
         if d == "w":
@@ -123,6 +135,18 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t):
             o -= 1
             if q[o] == "\u3000":
                 Chicken.Map[1] = o
+        a = 2
+        if Mons != 0:
+            for j in range(len(Mons)):
+                if Mons[j].Map[1] == o and Mons[j].HP > 0:
+                    a = Attack(Chicken,Mons[j])
+                if a == 0:
+                    pe = 1
+                    break
+                if a == 1:
+                    Mons.remove(Mons[j])
+                    q[o] = "\u3000"
+                    return Mons
         if Chicken.Map[1]%Map_W == 19:
             Chicken.Map[0] += 1
             Chicken.Map[1] -= Map_W-1
@@ -143,7 +167,58 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t):
             Chicken.Map[0] = 10
             Chicken.Map[1] = 257
             break
+        if (Chicken.Map[0] == 9 and (166 <= o and o <=169)):
+            Chicken.Map[0] = 0
+            Chicken.Map[1] = 190
+            break
         if Chicken.Map[0] == 10 and q[o] == "門":
             Chicken.Map[0] = 9
             Chicken.Map[1] = 103
+            break
         o = Chicken.Map[1]
+        
+def Attack(Chicken,Mons):
+    MyAttack = Chicken.ATK - Mons.DF #雞的攻擊
+    MonAttack = Mons.ATK - Chicken.DF #怪物的攻擊
+    if MyAttack <= 0:
+        MyAttack = 1
+    if MonAttack <= 0:
+        MonAttack = 1
+    while 1:
+        time.sleep(0.5)
+        p = random.randint(1,101)
+        if p in range(1,10):
+            MyFinalAttack = 2*MyAttack
+            print('%s 暴擊! 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害')
+        elif p in range(96,100):
+            MyFinalAttack = 0
+            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Chicken.Name,Mons.Name))
+        else:
+            MyFinalAttack = MyAttack
+            print('%s 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害')
+        Mons._HP(-MyFinalAttack)
+        if Mons.HP <= 0:
+            time.sleep(0.5)
+            print('%s 被 %s 擊殺了'%(Mons.Name,Chicken.Name))
+            return 1
+            break
+        
+        time.sleep(0.5)
+        q = random.randint(1,101)
+        if q in range(1,10):
+            MonFinalAttack = 2*MonAttack
+            print('%s 暴擊! 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害')
+        elif q in range(96,100):
+            MonFinalAttack = 0
+            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Mons.Name,Chicken.Name))
+        else:
+            MonFinalAttack = MonAttack
+            print('%s 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害')
+            
+            Chicken._HP(-MonFinalAttack)
+        if Chicken._HP <= 0:
+            time.sleep(0.5)
+            print('%s 被 %s 擊殺了'%(Chicken.Name,Mons.Name))
+            print('你死了!!')
+            return 0
+            break
