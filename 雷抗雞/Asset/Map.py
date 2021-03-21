@@ -47,13 +47,77 @@ def Map_Load(_id):
             p += Map[i][j]
     return (p,Map_H,Map_W)
 
-def Map_Print(q,Map_H,Map_W,p,Mon=0):
+def Map_Print(q,Map_H,Map_W,p,Boss,Chicken,Mon=0):
     k = q[p]
     q[p] = "雞"
     if Mon != 0:
-        for i in range(len(Mon)):
+        for i in range(len(Mon)-1):
             if Mon[i].HP > 0:
                 q[Mon[i].Map[1]] = "怪"
+        if Chicken.Map[0] == 0:
+            if Mon[len(Mon)-1].HP > 0 and Boss[0] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[179] = "\u3000"
+                q[199] = "\u3000"
+                q[219] = "\u3000"
+                q[239] = "\u3000"
+        elif Chicken.Map[0] == 1:
+            if Mon[len(Mon)-1].HP > 0 and Boss[1] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[179] = "\u3000"
+                q[199] = "\u3000"
+                q[219] = "\u3000"
+                q[239] = "\u3000"
+        elif Chicken.Map[0] == 2:
+            if Mon[len(Mon)-1].HP > 0 and Boss[2] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[388] = "\u3000"
+                q[389] = "\u3000"
+                q[390] = "\u3000"
+                q[391] = "\u3000"
+        elif Chicken.Map[0] == 3:
+            if Mon[len(Mon)-1].HP > 0 and Boss[3] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[160] = "\u3000"
+                q[180] = "\u3000"
+                q[200] = "\u3000"
+                q[220] = "\u3000"
+        elif Chicken.Map[0] == 4:
+            if Mon[len(Mon)-1].HP > 0 and Boss[4] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[160] = "\u3000"
+                q[180] = "\u3000"
+                q[200] = "\u3000"
+                q[220] = "\u3000"
+        elif Chicken.Map[0] == 5:
+            if Mon[len(Mon)-1].HP > 0 and Boss[5] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[388] = "\u3000"
+                q[389] = "\u3000"
+                q[390] = "\u3000"
+                q[391] = "\u3000"
+        elif Chicken.Map[0] == 6:
+            if Mon[len(Mon)-1].HP > 0 and Boss[6] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[179] = "\u3000"
+                q[199] = "\u3000"
+                q[219] = "\u3000"
+                q[239] = "\u3000"
+        elif Chicken.Map[0] == 7:
+            if Mon[len(Mon)-1].HP > 0 and Boss[7] == 0:
+                q[Mon[len(Mon)-1].Map[1]] = "王"
+            else:
+                q[179] = "\u3000"
+                q[199] = "\u3000"
+                q[219] = "\u3000"
+                q[239] = "\u3000"
     H  = int(p/Map_W)+1
     W = p%Map_W+1
     ppo = ""
@@ -139,8 +203,12 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t,Bag,Mons = 0):
         if Mons != 0:
             for j in range(len(Mons)):
                 if Mons[j].Map[1] == o and Mons[j].HP > 0:
-                    a = Attack(Chicken,Mons[j])
-                    Chicken._State(0)
+                    Mons[j]._State()
+                    print('\n是否要對',Mons[j].Name,'進行攻擊 y or n: ',end='')
+                    op = input('')
+                    if op == "y":
+                        a = Attack(Chicken,Mons[j])
+                        Chicken._State(0)
                 if a == 0:
                     Chicken.HP_ = 0
                 if a == 1:
@@ -164,13 +232,6 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t,Bag,Mons = 0):
             Chicken.Map[0] += 3
             Chicken.Map[1] -= (Map_H-1)*(Map_W)
             break
-        if Chicken.Map[0] == 10 and q[o] == "門":
-                Chicken.Map[0] = 9
-                Chicken.Map[1] = 103
-                break
-        if (Chicken.Map[0] == 9 and (171 <= o and o <=174)) and Chicken.Day < 6:
-            Work(Chicken,Bag)
-            break
         if Chicken.Day >= 6:
             if (Chicken.Map[0] == 9 and (81 <= o and o <=84)):
                 Shower(Chicken)
@@ -183,8 +244,9 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t,Bag,Mons = 0):
                 Buy(Bag)
                 break
             if (Chicken.Map[0] == 9 and (161 <= o and o <=164)):
-                Chicken.Map[0] = 0
-                Chicken.Map[1] = 190
+                print("你帶著 ",Chicken.Name," 來到了訓練所",end="")
+                oo = input("")
+                School(Chicken)
                 break
             if (Chicken.Map[0] == 9 and (166 <= o and o <=169)):
                 Chicken.Map[0] = 0
@@ -194,14 +256,41 @@ def Player_Move(q,Map_H,Map_W,Chicken,d,t,Bag,Mons = 0):
                 print("你望著以前工作的地方,心想絕對不要再回到這裡")
                 oo = input("")
                 break
-            if Chicken.Map[0] == 10 and q[o] == "吃":
-                Bag.Eat()
-                break
-            if Chicken.Map[0] == 10 and q[o] == "床":
-                Bag.Eat()
-                break
             if Chicken.Map[0] == 10 and q[o] == "窩":
                 break
+            if Chicken.Map[0] == 10 and q[o] == "吃":
+                Bag.Eat(Chicken)
+                break
+        else:
+            if (Chicken.Map[0] == 9 and (81 <= o and o <=84)):
+                print("我不需要去泡溫泉",end='')
+                oo = input("")
+                break
+            if (Chicken.Map[0] == 9 and (86 <= o and o <=89)):
+                Chicken.Map[0] = 10
+                Chicken.Map[1] = 257
+                break
+            if (Chicken.Map[0] == 9 and (91 <= o and o <=94)):
+                Buy(Bag)
+                break
+            if (Chicken.Map[0] == 9 and (161 <= o and o <=164)):
+                print("我不需要",end='')
+                oo = input("")
+                break
+            if (Chicken.Map[0] == 9 and (166 <= o and o <=169)):
+                print("我不需要去探索",end='')
+                oo = input("")
+                break
+            if (Chicken.Map[0] == 9 and (171 <= o and o <=174)):
+                Work(Chicken,Bag)
+                break
+        if Chicken.Map[0] == 10 and q[o] == "門":
+            Chicken.Map[0] = 9
+            Chicken.Map[1] = 103
+            break
+        if Chicken.Map[0] == 10 and q[o] == "床":
+            Sleep(Chicken)
+            break
         o = Chicken.Map[1]
 #-----------------------------------戰鬥系統--------------------------------------------
 def Attack(Chicken,Mons):
@@ -216,13 +305,15 @@ def Attack(Chicken,Mons):
         p = random.randint(1,101)
         if p in range(1,10):
             MyFinalAttack = 2*MyAttack
-            print('%s 暴擊! 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害')
+            print('%s 暴擊! 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害',end="")
         elif p in range(96,100):
             MyFinalAttack = 0
-            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Chicken.Name,Mons.Name))
+            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Chicken.Name,Mons.Name),end="")
         else:
             MyFinalAttack = MyAttack
-            print('%s 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害')
+            print('%s 對 %s 造成'%(Chicken.Name,Mons.Name), MyFinalAttack, '點傷害',end="")
+        print("    ",Chicken.Name,"飽食減少 1")
+        Chicken._Hunger(-1)
         Mons._HP(-MyFinalAttack)
         if Mons.HP <= 0:
             time.sleep(0.5)
@@ -236,13 +327,15 @@ def Attack(Chicken,Mons):
         q = random.randint(1,101)
         if q in range(1,10):
             MonFinalAttack = 2*MonAttack
-            print('%s 暴擊! 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害')
+            print('%s 暴擊! 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害',end="")
         elif q in range(96,100):
             MonFinalAttack = 0
-            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Mons.Name,Chicken.Name))
+            print('%s 攻擊失誤， %s 成功迴避攻擊'%(Mons.Name,Chicken.Name),end="")
         else:
             MonFinalAttack = MonAttack
-            print('%s 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害')          
+            print('%s 對 %s 造成'%(Mons.Name,Chicken.Name), MonFinalAttack, '點傷害',end="")
+        print("    ",Chicken.Name,"心情減少 1")
+        Chicken._Emotion(-1)
         Chicken._HP(-MonFinalAttack)
         if Chicken.HP_ <= 0:
             time.sleep(0.5)
@@ -268,53 +361,112 @@ def Buy(Bag):
         print(' 4. 特大麥香雞 : 100金幣/個')
         print('    效果: 的行動值增加 20 ,飽食度增加 20')
         print('')
-        shop_id = int(input('請輸入想買的物品編號: '))
+        shop_id = input('請輸入想買的物品編號: ')
         print('')
-        if shop_id == 0:
+        if shop_id == "0":
             break
-        num_id = int(input('請輸入購買的個數: '))
+        while 1:
+            try:
+                num_id = int(input('請輸入購買的個數: '))
+                break
+            except:
+                print("是數字歐~Difficult?")
         print('')
-        
-        if shop_id == 1:
-            Bag.add_money(-1*num_id*3)
+        a=0
+        if shop_id == "1" and Bag.Money >= num_id*5:
+            Bag.add_money(-1*num_id*5)
             Bag.add_food( (num_id) * 1)
             print('獲得了 ',num_id,' 個有機雞飼料 ! ! ')                
             time.sleep(0.5)
+            a=1
             print('--------------------------------------------------------------------------------')
             Bag.show()            
-        elif shop_id == 2:
+        elif shop_id == "2" and Bag.Money >= num_id*40:
             Bag.add_money(-1*num_id*40)
             Bag.add_cake(num_id)
             print('獲得了 ',num_id,' 個生乳酪蛋糕 ! ! ')
             time.sleep(0.5)
+            a=1
             print('--------------------------------------------------------------------------------')
             Bag.show()
-        elif shop_id == 3:
+        elif shop_id == "3" and Bag.Money >= num_id*80:
             Bag.add_money(-1*num_id*80)
             Bag.add_cookies(num_id)
             print('獲得了 ',num_id,' 個鴨子造型餅乾 ! ! ')
             time.sleep(0.5)
+            a=1
             print('--------------------------------------------------------------------------------')
             Bag.show()
-        elif shop_id == 4:
+        elif shop_id == "4" and Bag.Money >= num_id*100:
             Bag.add_money(-1*num_id*100)
             Bag.add_hamburger(num_id)
             print('獲得了 ',num_id,' 個特大麥香雞 ! ! ')
             time.sleep(0.5)
+            a=1
             print('--------------------------------------------------------------------------------')
             Bag.show()                    
-        else:
-            break
+        if a!=1:
+            print("口袋空空,錢不夠握~~~",end="")
+            oo = input("")
+            print('--------------------------------------------------------------------------------')
+            Bag.show()
 #------------------------------------工作--------------------------------------------
 def Work(Chichen,Bag):
+    print("八小時候....")
+    time.sleep(1)
+    print("你賺了200元")
+    time.sleep(1)
     Chicken.Add_Time(240)
-    Bag.add_money(100)
+    Bag.add_money(200)
+    
 #------------------------------------澡堂--------------------------------------------
 def Shower(Chicken):
-    print("你決定帶著",Chicken_Name,"來泡溫泉")
+    print("你決定帶著",Chicken.Name,"來泡溫泉")
+    time.sleep(1)
     print("三小時候.....")
+    time.sleep(1)
     Chicken.Add_Time(90)
     Chicken._HP(Chicken.HP/2)
     Chicken._Hunger(-5)
     Chicken._MP(Chicken.MP)
     print("行動值增加 20 ,飽食度減少 5 ,心情增加 10")
+    time.sleep(1)
+#------------------------------------點數--------------------------------------------
+def School(Chicken):
+    while 1:
+        if Chicken.Point > 0:
+            Chicken._State(1)
+            print("目前的點數為: ",Chicken.Point)
+            print("0.退出")
+            print("1.血量最大值加10")
+            print("2.攻擊加3")
+            print("3.防禦加3\n")
+            c = input("請選擇你要的升級:")
+            if c == "0":
+                break
+            if c == "1":
+                Chicken.HP += 10
+                print(Chicken.HP)
+                Chicken._HP(10)
+                Chicken.Point -= 1
+            elif c == "2":
+                Chicken.ATK += 3
+                Chicken._ATK(3)
+                Chicken.Point -= 1
+            elif c == "3":
+                Chicken.DF += 3
+                Chicken._DF(13)
+                Chicken.Point -= 1
+        else:
+            print("\n點數不足\m")
+            break
+#------------------------------------睡覺--------------------------------------------
+def Sleep(Chicken):
+    print("睡個了好覺!",end = "")
+    oo = input("")
+    Chicken.Time = 210
+    Chicken.Day += 1
+    Chicken._Hunger(-10)
+    Chicken._Emotion(+50)
+    Chicken._HP(Chicken.HP)
+    Chicken._MP(Chicken.MP)

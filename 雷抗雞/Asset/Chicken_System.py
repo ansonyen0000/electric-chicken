@@ -2,7 +2,7 @@ import random
 
 class Chicken(): #雞
     def __init__(self,Name,State,State_,Level,EXP,EXP_,HP,HP_,ATK,ATK_,DF,DF_,
-                 MP,MP_,Hunger,Emotion,Luck,Map,Point,Day,Time):
+                 MP,MP_,Hunger,Emotion,Luck,Map,Point,Day,Time):#Time一秒為2分鐘
         self.State = State
         self.State_ = State_
         self.Name = Name
@@ -111,6 +111,7 @@ class Chicken(): #雞
                     self.State_[4] = 0
                     print(self.Name,' 你的雞生就此終結 關於你傳奇的一生 沒人想知道','\n'
                           ,'R.I.P 願你的計概分數不會如此')
+                    print("提示: 重新開啟後會讀入當天早上的存檔")
             #狀態語音
             print("")
             if self.State_[4] == 0:
@@ -133,12 +134,12 @@ class Chicken(): #雞
                 oo = input("")
             
         if i==1:
+            print("")
             print(self.Name,'   ','Level ',self.Level,'(',self.EXP_,'/',self.EXP,')'
                   ,'\n','HP: ','(',self.HP_,'/',self.HP,')','   ','ATK: ',self.ATK_,'   ','DF: ',self.DF_,'   '
                   ,'\n','飽食度: ','(',self.Hunger,'/100',')','   ','心情值: ','(',self.Emotion,'/100',')'
                   ,'   ','行動值: ','(',self.MP_,'/',self.MP,')','\n','當前狀態: '
-                  ,self.State,'   ','幸運值: ',self.Luck,'   ','點數:',self.Point,
-                  end="")
+                  ,self.State,'   ','幸運值: ',self.Luck,'   ','點數:',self.Point)
             print("")    
     def _Name(self,Name):
         self.Name = Name
@@ -186,16 +187,22 @@ class Chicken(): #雞
             self.EXP = 0
     def _HP(self,HP):
         self.HP_ += HP
-        if self.HP_ > self.HP and self_State[0] == 2:
+        if self.HP_ > self.HP and self.State_[0] == 0:
             self.HP_ = self.HP
+        if self.HP_ > self.HP/2 and self.State_[0] == 2:
+            self.HP_ = self.HP/2
     def _ATK(self,ATK):
         self.ATK_ += ATK
-        if self.ATK_ > self.ATK and self_State[1] == 2:
+        if self.ATK_ > self.ATK and self.State_[1] == 0:
             self.ATK_ = self.ATK
+        if self.ATK_ > self.ATK/2 and self.State_[1] == 2:
+            self.ATK_ = self.ATK/2
     def _DF(self,DF):
         self.DF_ += DF
-        if self.DF_ > self.DF and self_State[2] == 2:
+        if self.DF_ > self.DF and self.State_[2] == 0:
             self.DF_ = self.DF
+        if self.DF_ > self.DF/2 and self.State_[2] == 2:
+            self.DF_ = self.DF/2
     def _MP(self,MP):
         self.MP_ += MP
         if self.MP_ > self.MP:
@@ -230,30 +237,30 @@ class Chicken(): #雞
             self.ATK_ += 7
             self.HP += 75
             self.HP_ += 75
-            self.DF += 5
-            self.DF_ += 5
+            self.DF += 7
+            self.DF_ += 7
             self.Luck += 2
         elif Level == 30:
             self.ATK += 9
             self.ATK_ += 9
             self.HP += 100
             self.HP_ += 100
-            self.DF += 7
-            self.DF_ += 7
+            self.DF += 9
+            self.DF_ += 9
             self.Luck += 2
         elif Level == 40:
             self.ATK += 12
             self.ATK_ += 12
             self.HP += 150
             self.HP_ += 150
-            self.DF += 8
-            self.DF_ += 8
+            self.DF += 12
+            self.DF_ += 12
             self.Luck += 2
         elif Level == 50:
-            self.ATK += 10
-            self.ATK_ += 10
+            self.ATK += 15
+            self.ATK_ += 15
             self.HP += 200
             self.HP_ += 200
-            self.DF += 10
-            self.DF_ += 10
+            self.DF += 15
+            self.DF_ += 15
             self.Luck += 2
